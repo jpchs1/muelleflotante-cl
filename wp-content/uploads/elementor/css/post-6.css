@@ -1,0 +1,15 @@
+.elementor-kit-6{--e-global-color-primary:#1A3A77;--e-global-color-secondary:#FFC93C;--e-global-color-text:#252627;--e-global-color-accent:#FFC93C;--e-global-color-74694fa:#0081C9;--e-global-color-104d66c:#444444;--e-global-typography-primary-font-family:"Atkinson Hyperlegible";--e-global-typography-primary-font-weight:bold;--e-global-typography-secondary-font-family:"Poppins";--e-global-typography-secondary-font-weight:900;--e-global-typography-text-font-family:"Atkinson Hyperlegible";--e-global-typography-text-font-weight:normal;--e-global-typography-accent-font-family:"Poppins";--e-global-typography-accent-font-weight:bold;}.elementor-section.elementor-section-boxed > .elementor-container{max-width:1140px;}.e-con{--container-max-width:1140px;}.elementor-widget:not(:last-child){margin-bottom:20px;}.elementor-element{--widgets-spacing:20px;}{}h1.entry-title{display:var(--page-title-display);}.elementor-kit-6 e-page-transition{background-color:#FFBC7D;}.site-header{padding-inline-end:0px;padding-inline-start:0px;}@media(max-width:1024px){.elementor-section.elementor-section-boxed > .elementor-container{max-width:1024px;}.e-con{--container-max-width:1024px;}}@media(max-width:767px){.elementor-section.elementor-section-boxed > .elementor-container{max-width:767px;}.e-con{--container-max-width:767px;}}/* Start Custom Fonts CSS */@font-face {
+	font-family: 'Atkinson Hyperlegible';
+	font-style: normal;
+	font-weight: bold;
+	font-display: auto;
+	src: url('https://muelleflotante.cl/wp-content/uploads/2023/08/Atkinson-Hyperlegible-Bold-102.woff') format('woff');
+}
+@font-face {
+	font-family: 'Atkinson Hyperlegible';
+	font-style: normal;
+	font-weight: normal;
+	font-display: auto;
+	src: url('https://muelleflotante.cl/wp-content/uploads/2023/08/Atkinson-Hyperlegible-Regular-102.woff') format('woff');
+}
+/* End Custom Fonts CSS */

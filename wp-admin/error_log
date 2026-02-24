@@ -1,0 +1,34 @@
+[12-Aug-2023 13:12:42 UTC] PHP Warning:  Undefined array key "editor_post_id" in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor-pro/modules/assets-manager/asset-types/fonts-manager.php on line 252
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:50 UTC] PHP Warning:  Trying to access array offset on value of type bool in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/includes/managers/image.php on line 108
+[12-Aug-2023 13:12:51 UTC] PHP Warning:  Undefined array key "editor_post_id" in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor-pro/modules/theme-builder/classes/conditions-manager.php on line 171
+[12-Aug-2023 13:12:51 UTC] PHP Warning:  Undefined array key "data" in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/core/common/modules/ajax/module.php on line 175
+[12-Aug-2023 13:12:51 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/modules/history/revisions-manager.php on line 363
+[12-Aug-2023 13:14:41 UTC] PHP Fatal error:  Uncaught Error: Call to a member function update_meta() on null in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor-pro/modules/theme-builder/classes/conditions-manager.php:304
+Stack trace:
+#0 /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor-pro/modules/theme-builder/classes/conditions-manager.php(177): ElementorPro\Modules\ThemeBuilder\Classes\Conditions_Manager->save_conditions(9, Array)
+#1 [internal function]: ElementorPro\Modules\ThemeBuilder\Classes\Conditions_Manager->ajax_save_theme_template_conditions(Array, Object(Elementor\Core\Common\Modules\Ajax\Module))
+#2 /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/core/common/modules/ajax/module.php(175): call_user_func(Array, Array, Object(Elementor\Core\Common\Modules\Ajax\Module))
+#3 /home/wwimpo/muelleflotante.cl/wp-includes/class-wp-hook.php(310): Elementor\Core\Common\Modules\Ajax\Module->handle_ajax_request('')
+#4 /home/wwimpo/muelleflotante.cl/wp-includes/class-wp-hook.php(334): WP_Hook->apply_filters('', Array)
+#5 /home/wwimpo/muelleflotante.cl/wp-includes/plugin.php(517): WP_Hook->do_action(Array)
+#6 /home/wwimpo/muelleflotante.cl/wp-admin/admin-ajax.php(188): do_action('wp_ajax_element...')
+#7 {main}
+  thrown in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor-pro/modules/theme-builder/classes/conditions-manager.php on line 304
+[14-Aug-2023 14:33:55 UTC] PHP Warning:  Attempt to read property "title" on null in /home/wwimpo/muelleflotante.cl/wp-includes/class-wp-customize-widgets.php on line 905
+[17-Aug-2023 18:42:01 UTC] PHP Warning:  Attempt to read property "title" on null in /home/wwimpo/muelleflotante.cl/wp-includes/class-wp-customize-widgets.php on line 905
+[26-Jul-2024 14:19:36 UTC] PHP Warning:  Undefined array key "data" in /home/wwimpo/muelleflotante.cl/wp-content/plugins/elementor/core/common/modules/ajax/module.php on line 175
