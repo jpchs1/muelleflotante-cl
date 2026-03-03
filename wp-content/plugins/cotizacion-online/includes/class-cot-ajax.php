@@ -35,6 +35,9 @@ class COT_Ajax {
         $empresa  = isset( $_POST['empresa'] ) ? sanitize_text_field( wp_unslash( $_POST['empresa'] ) ) : '';
         $rut      = isset( $_POST['rut'] ) ? sanitize_text_field( wp_unslash( $_POST['rut'] ) ) : '';
         $metros   = isset( $_POST['metros'] ) ? absint( $_POST['metros'] ) : 0;
+        if ( $metros > 0 ) {
+            $metros = intval( ceil( $metros / 5 ) * 5 );
+        }
 
         $errors = array();
         if ( empty( $nombre ) ) {
@@ -46,8 +49,8 @@ class COT_Ajax {
         if ( empty( $telefono ) ) {
             $errors[] = 'El telefono es obligatorio.';
         }
-        if ( $metros < 1 ) {
-            $errors[] = 'Debes ingresar al menos 1 m2.';
+        if ( $metros < 10 ) {
+            $errors[] = 'Debes ingresar al menos 10 m2.';
         }
 
         if ( ! empty( $errors ) ) {
@@ -55,9 +58,7 @@ class COT_Ajax {
         }
 
         // Get pricing
-        $precio_m2          = intval( get_option( 'cot_precio_m2', 290000 ) );
-        $costo_santiago      = intval( get_option( 'cot_costo_santiago', 45000 ) );
-        $costo_santiago_tipo = get_option( 'cot_costo_santiago_tipo', 'por_m2' );
+        $precio_m2          = 290000;
 
         // Calculate m2 subtotal
         $subtotal_m2 = $metros * $precio_m2;
@@ -92,16 +93,9 @@ class COT_Ajax {
             }
         }
 
-        // Calculate Santiago delivery cost
-        if ( $costo_santiago_tipo === 'porcentaje' ) {
-            $costo_stgo_calculado = intval( round( ( $subtotal_m2 + $total_accesorios ) * $costo_santiago / 100 ) );
-        } else {
-            // por_m2
-            $costo_stgo_calculado = $costo_santiago * $metros;
-        }
-
-        // Total puesto en Santiago
-        $total_santiago = $subtotal_m2 + $total_accesorios + $costo_stgo_calculado;
+        // Total
+        $costo_stgo_calculado = 0;
+        $total_santiago = $subtotal_m2 + $total_accesorios;
 
         // Delivery info
         $entrega_tipo = isset( $_POST['entrega_tipo'] ) ? sanitize_text_field( wp_unslash( $_POST['entrega_tipo'] ) ) : 'santiago';

@@ -54,21 +54,6 @@ class COT_Admin {
      * Register settings
      */
     public function register_settings() {
-        register_setting( 'cot_settings_group', 'cot_precio_m2', array(
-            'type'              => 'integer',
-            'sanitize_callback' => 'absint',
-            'default'           => 290000,
-        ) );
-        register_setting( 'cot_settings_group', 'cot_costo_santiago', array(
-            'type'              => 'integer',
-            'sanitize_callback' => 'absint',
-            'default'           => 45000,
-        ) );
-        register_setting( 'cot_settings_group', 'cot_costo_santiago_tipo', array(
-            'type'              => 'string',
-            'sanitize_callback' => 'sanitize_text_field',
-            'default'           => 'por_m2',
-        ) );
         register_setting( 'cot_settings_group', 'cot_admin_email', array(
             'type'              => 'string',
             'sanitize_callback' => 'sanitize_email',
@@ -96,6 +81,7 @@ class COT_Admin {
             $sanitized[] = array(
                 'nombre' => sanitize_text_field( $item['nombre'] ),
                 'precio' => absint( $item['precio'] ),
+                'imagen' => ! empty( $item['imagen'] ) ? sanitize_file_name( wp_basename( $item['imagen'] ) ) : '',
                 'activo' => isset( $item['activo'] ) ? 1 : 0,
             );
         }
@@ -146,7 +132,6 @@ class COT_Admin {
         $subtotal_m2 = isset( $meta['_cot_subtotal_m2'][0] ) ? $meta['_cot_subtotal_m2'][0] : '';
         $accesorios  = isset( $meta['_cot_accesorios'][0] ) ? maybe_unserialize( $meta['_cot_accesorios'][0] ) : array();
         $total_acc   = isset( $meta['_cot_total_accesorios'][0] ) ? $meta['_cot_total_accesorios'][0] : 0;
-        $costo_stgo  = isset( $meta['_cot_costo_santiago'][0] ) ? $meta['_cot_costo_santiago'][0] : 0;
         $total_stgo  = isset( $meta['_cot_total_santiago'][0] ) ? $meta['_cot_total_santiago'][0] : 0;
         $entrega     = isset( $meta['_cot_entrega_tipo'][0] ) ? $meta['_cot_entrega_tipo'][0] : 'santiago';
         $region      = isset( $meta['_cot_entrega_region'][0] ) ? $meta['_cot_entrega_region'][0] : '';
@@ -207,8 +192,7 @@ class COT_Admin {
 
         <h3 class="cot-section-title">Totales</h3>
         <table class="cot-detail-table">
-            <tr><th>Costo logistico Santiago</th><td>$<?php echo esc_html( number_format( intval( $costo_stgo ), 0, ',', '.' ) ); ?> CLP</td></tr>
-            <tr><th>Total Mercaderia Puesta en Santiago</th><td><strong style="font-size:16px;">$<?php echo esc_html( number_format( intval( $total_stgo ), 0, ',', '.' ) ); ?> CLP</strong></td></tr>
+            <tr><th>Total Cotizacion (sin flete)</th><td><strong style="font-size:16px;">$<?php echo esc_html( number_format( intval( $total_stgo ), 0, ',', '.' ) ); ?> CLP</strong></td></tr>
         </table>
 
         <h3 class="cot-section-title">Entrega</h3>
@@ -219,7 +203,7 @@ class COT_Admin {
                     <?php if ( $entrega === 'otra' ) : ?>
                         <span class="cot-badge-flete">Flete por cotizar</span>
                     <?php else : ?>
-                        <span class="cot-badge-santiago">Puesto en Santiago</span>
+                        <span class="cot-badge-santiago">Sin flete</span>
                     <?php endif; ?>
                 </td>
             </tr>

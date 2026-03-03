@@ -57,15 +57,10 @@ class COT_Shortcode {
             }
         }
 
-        $costo_santiago      = intval( get_option( 'cot_costo_santiago', 45000 ) );
-        $costo_santiago_tipo = get_option( 'cot_costo_santiago_tipo', 'por_m2' );
-
         wp_localize_script( 'cot-online-js', 'cotData', array(
             'ajaxurl'            => admin_url( 'admin-ajax.php' ),
             'nonce'              => wp_create_nonce( 'cot_online_nonce' ),
-            'precio_m2'          => intval( get_option( 'cot_precio_m2', 290000 ) ),
-            'costo_santiago'     => $costo_santiago,
-            'costo_santiago_tipo'=> $costo_santiago_tipo,
+            'precio_m2'          => 290000,
             'accesorios'         => $accesorios_activos,
         ) );
     }
