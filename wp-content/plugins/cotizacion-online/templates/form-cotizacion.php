@@ -96,10 +96,6 @@ if ( is_array( $accesorios ) ) {
                     <span class="cot-metros-unit">m&sup2;</span>
                 </div>
                 <div class="cot-metros-price-preview">
-                    <span class="cot-price-label">Precio por m&sup2;:</span>
-                    <span id="cot-precio-m2-display" class="cot-price-value">$265.000/m&sup2;</span>
-                </div>
-                <div class="cot-metros-price-preview">
                     <span class="cot-price-label">Subtotal m&sup2;:</span>
                     <span id="cot-subtotal-m2" class="cot-price-value">$0</span>
                 </div>

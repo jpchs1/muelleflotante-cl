@@ -46,9 +46,6 @@
         var precioM2 = getPrecioM2(metros);
         var subtotalM2 = metros * precioM2;
 
-        // Update price per m2 display
-        $('#cot-precio-m2-display').text(formatCLP(precioM2) + '/m\u00B2');
-
         // Accessories total
         var totalAcc = 0;
         $('.cot-acc-checkbox:checked').each(function() {
