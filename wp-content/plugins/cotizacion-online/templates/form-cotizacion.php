@@ -126,6 +126,17 @@ if ( is_array( $accesorios ) ) {
                         <div class="cot-accessory-price">
                             $<?php echo esc_html( number_format( intval( $acc['precio'] ), 0, ',', '.' ) ); ?> c/u
                         </div>
+                        <?php if ( stripos( $acc['nombre'], 'Escala de acceso' ) !== false ) : ?>
+                        <div class="cot-escalera-steps" style="display:none;">
+                            <label class="cot-escalera-label">Peldanos:</label>
+                            <select class="cot-escalera-select cot-input" data-acc-id="<?php echo esc_attr( $index ); ?>">
+                                <option value="2" selected>2 peldanos ($<?php echo esc_html( number_format( intval( $acc['precio'] ), 0, ',', '.' ) ); ?>)</option>
+                                <option value="3">3 peldanos ($<?php echo esc_html( number_format( intval( $acc['precio'] ) + 65000, 0, ',', '.' ) ); ?>)</option>
+                                <option value="4">4 peldanos ($<?php echo esc_html( number_format( intval( $acc['precio'] ) + 130000, 0, ',', '.' ) ); ?>)</option>
+                                <option value="5">5 peldanos ($<?php echo esc_html( number_format( intval( $acc['precio'] ) + 195000, 0, ',', '.' ) ); ?>)</option>
+                            </select>
+                        </div>
+                        <?php endif; ?>
                         <div class="cot-accessory-qty" style="display:none;">
                             <button type="button" class="cot-qty-btn cot-qty-minus" aria-label="Disminuir cantidad">-</button>
                             <input type="number" class="cot-qty-input" value="1" min="1" max="99" data-acc-id="<?php echo esc_attr( $index ); ?>">
