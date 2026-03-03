@@ -84,6 +84,27 @@ define( 'WP_DEBUG', false );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
+/* ==========================================================================
+ * WP Mail SMTP – Configuración SMTP autenticado para info@muelleflotante.cl
+ *
+ * IMPORTANTE: Reemplaza 'TU_CONTRASEÑA_SMTP_AQUI' con la contraseña real
+ * de la cuenta info@muelleflotante.cl en el servidor de producción.
+ * NO commits la contraseña real al repositorio.
+ * ========================================================================== */
+define( 'WPMS_ON', true );
+define( 'WPMS_MAIL_FROM', 'info@muelleflotante.cl' );
+define( 'WPMS_MAIL_FROM_FORCE', true );
+define( 'WPMS_MAIL_FROM_NAME', 'Muelle Flotante' );
+define( 'WPMS_MAIL_FROM_NAME_FORCE', true );
+define( 'WPMS_MAILER', 'smtp' );
+define( 'WPMS_SMTP_HOST', 'mail.muelleflotante.cl' );
+define( 'WPMS_SMTP_PORT', 465 );
+define( 'WPMS_SSL', 'ssl' );
+define( 'WPMS_SMTP_AUTH', true );
+define( 'WPMS_SMTP_USER', 'info@muelleflotante.cl' );
+define( 'WPMS_SMTP_PASS', 'TU_CONTRASEÑA_SMTP_AQUI' );
+define( 'WPMS_SMTP_AUTOTLS', true );
+
 
 
 /* That's all, stop editing! Happy publishing. */
