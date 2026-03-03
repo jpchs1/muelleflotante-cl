@@ -50,13 +50,22 @@
         var totalAcc = 0;
         $('.cot-acc-checkbox:checked').each(function() {
             var accId = $(this).data('acc-id');
-            var qty = parseInt($(this).closest('.cot-accessory-card').find('.cot-qty-input').val()) || 1;
+            var card = $(this).closest('.cot-accessory-card');
+            var qty = parseInt(card.find('.cot-qty-input').val()) || 1;
             var price = accPriceMap[accId] || 0;
+
+            // Check if this is an escalera with step selector
+            var stepSelect = card.find('.cot-escalera-select');
+            if (stepSelect.length) {
+                var steps = parseInt(stepSelect.val()) || 2;
+                price = price + (steps - 2) * 65000;
+            }
+
             var lineTotal = price * qty;
             totalAcc += lineTotal;
 
             // Update line subtotal display
-            $(this).closest('.cot-accessory-card').find('.cot-acc-subtotal-value').text(formatCLP(lineTotal));
+            card.find('.cot-acc-subtotal-value').text(formatCLP(lineTotal));
         });
 
         // Total
@@ -94,12 +103,20 @@
                 card.addClass('cot-acc-selected');
                 card.find('.cot-accessory-qty').show();
                 card.find('.cot-accessory-subtotal').show();
+                card.find('.cot-escalera-steps').show();
             } else {
                 card.removeClass('cot-acc-selected');
                 card.find('.cot-accessory-qty').hide();
                 card.find('.cot-accessory-subtotal').hide();
+                card.find('.cot-escalera-steps').hide();
                 card.find('.cot-qty-input').val(1);
+                card.find('.cot-escalera-select').val(2);
             }
+            recalculate();
+        });
+
+        // Escalera steps change
+        $(document).on('change', '.cot-escalera-select', function() {
             recalculate();
         });
 
@@ -196,11 +213,18 @@
             // Collect selected accessories
             $('.cot-acc-checkbox:checked').each(function() {
                 var accId = $(this).data('acc-id');
-                var qty = parseInt($(this).closest('.cot-accessory-card').find('.cot-qty-input').val()) || 1;
-                formData.accesorios.push({
+                var card = $(this).closest('.cot-accessory-card');
+                var qty = parseInt(card.find('.cot-qty-input').val()) || 1;
+                var accData = {
                     id: accId,
                     cantidad: qty
-                });
+                };
+                // Include escalera steps if applicable
+                var stepSelect = card.find('.cot-escalera-select');
+                if (stepSelect.length) {
+                    accData.peldanos = parseInt(stepSelect.val()) || 2;
+                }
+                formData.accesorios.push(accData);
             });
 
             // Delivery fields

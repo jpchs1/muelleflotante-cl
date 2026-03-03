@@ -79,15 +79,30 @@ class COT_Ajax {
 
                 $acc_info  = $accesorios_config[ $acc_id ];
                 $acc_price = intval( $acc_info['precio'] );
+
+                // Handle escalera peldaños
+                $peldanos = 0;
+                if ( stripos( $acc_info['nombre'], 'Escala de acceso' ) !== false ) {
+                    $peldanos = isset( $acc_data['peldanos'] ) ? absint( $acc_data['peldanos'] ) : 2;
+                    if ( $peldanos < 2 ) $peldanos = 2;
+                    if ( $peldanos > 5 ) $peldanos = 5;
+                    $acc_price = $acc_price + ( $peldanos - 2 ) * 65000;
+                }
+
                 $acc_subtotal = $acc_price * $acc_qty;
 
-                $accesorios_seleccionados[] = array(
+                $acc_entry = array(
                     'id'       => $acc_id,
                     'nombre'   => sanitize_text_field( $acc_info['nombre'] ),
                     'cantidad' => $acc_qty,
                     'precio'   => $acc_price,
                     'subtotal' => $acc_subtotal,
                 );
+                if ( $peldanos > 0 ) {
+                    $acc_entry['peldanos'] = $peldanos;
+                    $acc_entry['nombre'] = sanitize_text_field( $acc_info['nombre'] ) . ' (' . $peldanos . ' peldanos)';
+                }
+                $accesorios_seleccionados[] = $acc_entry;
 
                 $total_accesorios += $acc_subtotal;
             }
