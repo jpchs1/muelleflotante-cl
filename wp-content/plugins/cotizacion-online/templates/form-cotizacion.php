@@ -92,7 +92,7 @@ if ( is_array( $accesorios ) ) {
                 <label for="cot_metros" class="cot-label">Metros cuadrados (m&sup2;) <span class="cot-required">*</span></label>
                 <p class="cot-helper">Ingrese los m&sup2; aproximados de su muelle</p>
                 <div class="cot-metros-input-wrapper">
-                    <input type="number" id="cot_metros" name="metros" class="cot-input cot-input-metros" min="1" step="1" value="1" required>
+                    <input type="number" id="cot_metros" name="metros" class="cot-input cot-input-metros" min="10" step="5" value="10" required>
                     <span class="cot-metros-unit">m&sup2;</span>
                 </div>
                 <div class="cot-metros-price-preview">
@@ -114,10 +114,15 @@ if ( is_array( $accesorios ) ) {
                 <div class="cot-accessories-grid" id="cot-accessories-grid">
                     <?php foreach ( $accesorios_activos as $index => $acc ) : ?>
                     <div class="cot-accessory-card" data-acc-id="<?php echo esc_attr( $index ); ?>">
-                        <div class="cot-accessory-check">
-                            <input type="checkbox" id="cot_acc_<?php echo esc_attr( $index ); ?>" class="cot-acc-checkbox" data-acc-id="<?php echo esc_attr( $index ); ?>">
-                            <label for="cot_acc_<?php echo esc_attr( $index ); ?>" class="cot-accessory-name"><?php echo esc_html( $acc['nombre'] ); ?></label>
-                        </div>
+                            <?php if ( ! empty( $acc['imagen'] ) ) : ?>
+                            <div class="cot-accessory-img">
+                                <img src="<?php echo esc_url( COT_ONLINE_URL . 'assets/img/accesorios/' . $acc['imagen'] ); ?>" alt="<?php echo esc_attr( $acc['nombre'] ); ?>" loading="lazy">
+                            </div>
+                            <?php endif; ?>
+                            <div class="cot-accessory-check">
+                                <input type="checkbox" id="cot_acc_<?php echo esc_attr( $index ); ?>" class="cot-acc-checkbox" data-acc-id="<?php echo esc_attr( $index ); ?>">
+                                <label for="cot_acc_<?php echo esc_attr( $index ); ?>" class="cot-accessory-name"><?php echo esc_html( $acc['nombre'] ); ?></label>
+                            </div>
                         <div class="cot-accessory-price">
                             $<?php echo esc_html( number_format( intval( $acc['precio'] ), 0, ',', '.' ) ); ?> c/u
                         </div>
@@ -154,8 +159,8 @@ if ( is_array( $accesorios ) ) {
                         <input type="radio" name="entrega_tipo" value="santiago" checked class="cot-delivery-radio">
                         <span class="cot-delivery-radio-custom"></span>
                         <div class="cot-delivery-info">
-                            <strong>Puesto en Santiago</strong>
-                            <span class="cot-delivery-desc">Mercaderia entregada en Santiago (incluido en el precio)</span>
+                            <strong>Solo mercaderia (sin flete)</strong>
+                            <span class="cot-delivery-desc">Total incluye muelle + accesorios, sin considerar transporte/despacho</span>
                         </div>
                     </label>
                     <label class="cot-delivery-option">
@@ -163,7 +168,7 @@ if ( is_array( $accesorios ) ) {
                         <span class="cot-delivery-radio-custom"></span>
                         <div class="cot-delivery-info">
                             <strong>Cotizar flete a otra ubicacion</strong>
-                            <span class="cot-delivery-desc">Solicitar valor de despacho a otra region</span>
+                            <span class="cot-delivery-desc">Solicitar valor de despacho (el total no incluye flete)</span>
                         </div>
                     </label>
                 </div>
@@ -209,20 +214,16 @@ if ( is_array( $accesorios ) ) {
             <div class="cot-section-body">
                 <div class="cot-summary-box">
                     <div class="cot-summary-row">
-                        <span class="cot-summary-label">Subtotal Muelle Flotante (<span id="cot-summary-m2">1</span> m&sup2;):</span>
+                        <span class="cot-summary-label">Subtotal Muelle Flotante (<span id="cot-summary-m2">10</span> m&sup2;):</span>
                         <span id="cot-summary-subtotal-m2" class="cot-summary-value">$0</span>
                     </div>
                     <div class="cot-summary-row">
                         <span class="cot-summary-label">Accesorios:</span>
                         <span id="cot-summary-accesorios" class="cot-summary-value">$0</span>
                     </div>
-                    <div class="cot-summary-row">
-                        <span class="cot-summary-label">Costo logistico puesto en Santiago:</span>
-                        <span id="cot-summary-santiago" class="cot-summary-value">$0</span>
-                    </div>
                     <div class="cot-summary-divider"></div>
                     <div class="cot-summary-row cot-summary-total">
-                        <span class="cot-summary-label">Total Mercaderia Puesta en Santiago:</span>
+                        <span class="cot-summary-label">Total Cotizacion:</span>
                         <span id="cot-summary-total" class="cot-summary-value cot-total-value">$0</span>
                     </div>
                     <div id="cot-summary-flete-badge" class="cot-flete-badge" style="display:none;">

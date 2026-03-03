@@ -67,7 +67,7 @@ $page_url = $page ? get_permalink( $page ) : '';
                     <th>ID</th>
                     <th>Cliente</th>
                     <th>m&sup2;</th>
-                    <th>Total Santiago</th>
+                    <th>Total</th>
                     <th>Fecha</th>
                     <th></th>
                 </tr>
@@ -105,14 +105,13 @@ $page_url = $page ? get_permalink( $page ) : '';
 
         <h3>Como editar precios</h3>
         <ul>
-            <li><strong>Precio por m&sup2;:</strong> Ve a <a href="<?php echo esc_url( admin_url( 'admin.php?page=cot-configuracion' ) ); ?>">Configuracion</a> y modifica el "Precio por m&sup2;".</li>
-            <li><strong>Costo logistico Santiago:</strong> En Configuracion, ajusta el "Costo Logistico Puesto en Santiago". Puede ser un monto por m&sup2; o un porcentaje sobre el subtotal.</li>
-            <li><strong>Accesorios:</strong> En Configuracion, agrega, edita o elimina accesorios. Marca como "Activo" los que desees mostrar en el formulario.</li>
+            <li><strong>Precio por m&sup2;:</strong> El precio es fijo ($290.000 CLP por m&sup2;).</li>
+            <li><strong>Accesorios:</strong> En <a href="<?php echo esc_url( admin_url( 'admin.php?page=cot-configuracion' ) ); ?>">Configuracion</a>, agrega, edita o elimina accesorios. Marca como "Activo" los que desees mostrar en el formulario. Puedes indicar una imagen (nombre de archivo) para mostrar en el formulario.</li>
         </ul>
 
         <h3>Donde se almacena la informacion</h3>
         <ul>
-            <li>Precios: <code>wp_options</code> (opciones <code>cot_precio_m2</code>, <code>cot_costo_santiago</code>, <code>cot_accesorios</code>).</li>
+            <li>Precios: precio fijo en el plugin + accesorios en <code>wp_options</code> (opcion <code>cot_accesorios</code>).</li>
             <li>Cotizaciones: Custom Post Type <code>cotizacion</code> con meta datos asociados.</li>
         </ul>
     </div>

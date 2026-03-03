@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Cotizacion Online - Muelle Flotante
  * Description: Cotizador online de muelles flotantes con calculo en tiempo real, almacenamiento de cotizaciones y envio de emails automaticos.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Muelle Flotante
  * Text Domain: cotizacion-online
  * Domain Path: /languages
@@ -12,7 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'COT_ONLINE_VERSION', '1.0.0' );
+define( 'COT_ONLINE_VERSION', '1.0.1' );
+define( 'COT_ONLINE_PRECIO_M2', 290000 );
 define( 'COT_ONLINE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'COT_ONLINE_URL', plugin_dir_url( __FILE__ ) );
 
@@ -61,31 +62,37 @@ function cot_online_activate() {
             array(
                 'nombre' => 'Cornamusa de amarre',
                 'precio' => 25000,
+                'imagen' => 'cornamusa.jpg',
                 'activo' => 1,
             ),
             array(
                 'nombre' => 'Defensa lateral',
                 'precio' => 35000,
+                'imagen' => 'defensa.jpg',
                 'activo' => 1,
             ),
             array(
                 'nombre' => 'Escala de acceso',
                 'precio' => 180000,
+                'imagen' => 'escala.jpg',
                 'activo' => 1,
             ),
             array(
                 'nombre' => 'Soporte para kayak',
                 'precio' => 95000,
+                'imagen' => 'kayak.jpg',
                 'activo' => 1,
             ),
             array(
                 'nombre' => 'Iluminacion LED sumergible',
                 'precio' => 65000,
+                'imagen' => 'led.jpg',
                 'activo' => 1,
             ),
             array(
                 'nombre' => 'Anclaje de fondo',
                 'precio' => 120000,
+                'imagen' => 'anclaje.jpg',
                 'activo' => 1,
             ),
         );
@@ -115,3 +122,36 @@ function cot_online_init() {
     new COT_Ajax();
 }
 add_action( 'plugins_loaded', 'cot_online_init' );
+
+/**
+ * Backfill accessory images for existing installs
+ */
+function cot_online_backfill_accessory_images() {
+    $accesorios = get_option( 'cot_accesorios', array() );
+    if ( ! is_array( $accesorios ) ) {
+        return;
+    }
+
+    $map = array(
+        'Cornamusa de amarre'          => 'cornamusa.jpg',
+        'Defensa lateral'             => 'defensa.jpg',
+        'Escala de acceso'            => 'escala.jpg',
+        'Soporte para kayak'          => 'kayak.jpg',
+        'Iluminacion LED sumergible'  => 'led.jpg',
+        'Anclaje de fondo'            => 'anclaje.jpg',
+    );
+
+    $changed = false;
+    foreach ( $accesorios as $i => $acc ) {
+        $nombre = isset( $acc['nombre'] ) ? $acc['nombre'] : '';
+        if ( empty( $acc['imagen'] ) && ! empty( $nombre ) && isset( $map[ $nombre ] ) ) {
+            $accesorios[ $i ]['imagen'] = $map[ $nombre ];
+            $changed = true;
+        }
+    }
+
+    if ( $changed ) {
+        update_option( 'cot_accesorios', $accesorios );
+    }
+}
+add_action( 'plugins_loaded', 'cot_online_backfill_accessory_images', 20 );

@@ -22,8 +22,12 @@
      * Recalculate all totals in real-time
      */
     function recalculate() {
-        var metros = parseInt($('#cot_metros').val()) || 0;
-        if (metros < 0) metros = 0;
+        var metros = parseInt($('#cot_metros').val()) || 10;
+        if (metros < 10) metros = 10;
+        metros = Math.ceil(metros / 5) * 5;
+        if (parseInt($('#cot_metros').val()) !== metros) {
+            $('#cot_metros').val(metros);
+        }
 
         // Subtotal m2
         var subtotalM2 = metros * cotData.precio_m2;
@@ -41,16 +45,8 @@
             $(this).closest('.cot-accessory-card').find('.cot-acc-subtotal-value').text(formatCLP(lineTotal));
         });
 
-        // Santiago cost
-        var costoSantiago = 0;
-        if (cotData.costo_santiago_tipo === 'porcentaje') {
-            costoSantiago = Math.round((subtotalM2 + totalAcc) * cotData.costo_santiago / 100);
-        } else {
-            costoSantiago = cotData.costo_santiago * metros;
-        }
-
-        // Total puesto en Santiago
-        var totalSantiago = subtotalM2 + totalAcc + costoSantiago;
+        // Total
+        var totalSantiago = subtotalM2 + totalAcc;
 
         // Update UI
         $('#cot-subtotal-m2').text(formatCLP(subtotalM2));
@@ -58,7 +54,6 @@
         $('#cot-summary-m2').text(metros);
         $('#cot-summary-subtotal-m2').text(formatCLP(subtotalM2));
         $('#cot-summary-accesorios').text(formatCLP(totalAcc));
-        $('#cot-summary-santiago').text(formatCLP(costoSantiago));
         $('#cot-summary-total').text(formatCLP(totalSantiago));
 
         // Flete badge
@@ -156,7 +151,7 @@
             if (!$('#cot_nombre').val().trim()) errors.push('Nombre es obligatorio');
             if (!$('#cot_email').val().trim() || !isValidEmail($('#cot_email').val())) errors.push('Email valido es obligatorio');
             if (!$('#cot_telefono').val().trim()) errors.push('Telefono es obligatorio');
-            if (parseInt($('#cot_metros').val()) < 1) errors.push('Ingrese al menos 1 m\u00B2');
+            if (parseInt($('#cot_metros').val()) < 10) errors.push('Ingrese al menos 10 m\u00B2');
 
             if (errors.length) {
                 $messages.html(errors.join('<br>')).addClass('cot-msg-error').show();

@@ -59,7 +59,7 @@ class COT_CPT {
             'cot_email'       => 'Email',
             'cot_metros'      => 'm&sup2;',
             'cot_accesorios'  => 'Accesorios',
-            'cot_total'       => 'Total Santiago (CLP)',
+            'cot_total'       => 'Total (CLP)',
             'cot_entrega'     => 'Entrega',
             'date'            => 'Fecha',
         );
@@ -102,7 +102,7 @@ class COT_CPT {
                     $region = isset( $meta['_cot_entrega_region'][0] ) ? $meta['_cot_entrega_region'][0] : '';
                     echo '<span style="color:#e67e22;">Flete por cotizar</span><br><small>' . esc_html( $region ) . '</small>';
                 } else {
-                    echo '<span style="color:#27ae60;">Puesto en Santiago</span>';
+                    echo '<span style="color:#27ae60;">Sin flete</span>';
                 }
                 break;
         }

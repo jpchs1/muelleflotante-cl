@@ -124,9 +124,8 @@ class COT_Email {
         $body .= '<table style="width:100%;">';
         $body .= '<tr><td style="padding:4px 0;font-size:13px;">Subtotal m&sup2;:</td><td style="padding:4px 0;font-size:13px;text-align:right;">' . $this->format_clp( $data['subtotal_m2'] ) . '</td></tr>';
         $body .= '<tr><td style="padding:4px 0;font-size:13px;">Accesorios:</td><td style="padding:4px 0;font-size:13px;text-align:right;">' . $this->format_clp( $data['total_accesorios'] ) . '</td></tr>';
-        $body .= '<tr><td style="padding:4px 0;font-size:13px;">Costo logistico Santiago:</td><td style="padding:4px 0;font-size:13px;text-align:right;">' . $this->format_clp( $data['costo_santiago'] ) . '</td></tr>';
         $body .= '<tr><td colspan="2" style="border-top:1px solid #27ae60;padding-top:8px;"></td></tr>';
-        $body .= '<tr><td style="padding:4px 0;font-size:16px;"><strong>Total Puesto en Santiago:</strong></td><td style="padding:4px 0;font-size:16px;text-align:right;color:#27ae60;"><strong>' . $this->format_clp( $data['total_santiago'] ) . ' CLP</strong></td></tr>';
+        $body .= '<tr><td style="padding:4px 0;font-size:16px;"><strong>Total Cotizacion (sin flete):</strong></td><td style="padding:4px 0;font-size:16px;text-align:right;color:#27ae60;"><strong>' . $this->format_clp( $data['total_santiago'] ) . ' CLP</strong></td></tr>';
         $body .= '</table>';
         $body .= '</div>';
 
@@ -146,7 +145,7 @@ class COT_Email {
             $body .= '</table>';
         } else {
             $body .= '<div style="background:#e8f8f0;border-left:4px solid #27ae60;padding:12px 15px;">';
-            $body .= '<strong style="color:#27ae60;">Puesto en Santiago - Incluido en el total</strong>';
+            $body .= '<strong style="color:#27ae60;">Solo mercaderia (sin flete)</strong>';
             $body .= '</div>';
         }
 
@@ -200,7 +199,7 @@ class COT_Email {
 
         // Total
         $body .= '<div style="background:#f0f7ec;border:2px solid #27ae60;border-radius:6px;padding:15px;margin:20px 0;text-align:center;">';
-        $body .= '<p style="margin:0 0 5px;font-size:13px;color:#555;">Total Mercaderia Puesta en Santiago</p>';
+        $body .= '<p style="margin:0 0 5px;font-size:13px;color:#555;">Total Cotizacion (sin flete)</p>';
         $body .= '<p style="margin:0;font-size:22px;color:#27ae60;"><strong>' . $this->format_clp( $data['total_santiago'] ) . ' CLP</strong></p>';
         $body .= '</div>';
 
