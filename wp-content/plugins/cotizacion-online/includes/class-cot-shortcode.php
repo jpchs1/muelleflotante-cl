@@ -60,7 +60,7 @@ class COT_Shortcode {
         wp_localize_script( 'cot-online-js', 'cotData', array(
             'ajaxurl'            => admin_url( 'admin-ajax.php' ),
             'nonce'              => wp_create_nonce( 'cot_online_nonce' ),
-            'precio_m2'          => 290000,
+            'precio_m2'          => COT_ONLINE_PRECIO_M2,
             'accesorios'         => $accesorios_activos,
         ) );
     }

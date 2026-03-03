@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$precio_m2          = 290000; // precio fijo
+$precio_m2          = COT_ONLINE_PRECIO_M2; // precio fijo
 $admin_email        = get_option( 'cot_admin_email', 'info@muelleflotante.cl' );
 $accesorios         = get_option( 'cot_accesorios', array() );
 ?>

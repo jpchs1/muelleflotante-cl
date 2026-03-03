@@ -58,7 +58,7 @@ class COT_Ajax {
         }
 
         // Get pricing
-        $precio_m2          = 290000;
+        $precio_m2          = COT_ONLINE_PRECIO_M2;
 
         // Calculate m2 subtotal
         $subtotal_m2 = $metros * $precio_m2;
