@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Cotizacion Online - Muelle Flotante
  * Description: Cotizador online de muelles flotantes con calculo en tiempo real, almacenamiento de cotizaciones y envio de emails automaticos.
- * Version: 1.0.1
+ * Version: 1.2.0
  * Author: Muelle Flotante
  * Text Domain: cotizacion-online
  * Domain Path: /languages
@@ -12,8 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'COT_ONLINE_VERSION', '1.0.1' );
-define( 'COT_ONLINE_PRECIO_M2', 290000 );
+define( 'COT_ONLINE_VERSION', '1.2.0' );
 define( 'COT_ONLINE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'COT_ONLINE_URL', plugin_dir_url( __FILE__ ) );
 
@@ -58,45 +57,7 @@ function cot_online_activate() {
         update_option( 'cot_costo_santiago_tipo', 'por_m2' );
     }
     if ( false === get_option( 'cot_accesorios' ) ) {
-        $default_accesorios = array(
-            array(
-                'nombre' => 'Cornamusa de amarre',
-                'precio' => 25000,
-                'imagen' => 'cornamusa.jpg',
-                'activo' => 1,
-            ),
-            array(
-                'nombre' => 'Defensa lateral',
-                'precio' => 35000,
-                'imagen' => 'defensa.jpg',
-                'activo' => 1,
-            ),
-            array(
-                'nombre' => 'Escala de acceso',
-                'precio' => 180000,
-                'imagen' => 'escala.jpg',
-                'activo' => 1,
-            ),
-            array(
-                'nombre' => 'Soporte para kayak',
-                'precio' => 95000,
-                'imagen' => 'kayak.jpg',
-                'activo' => 1,
-            ),
-            array(
-                'nombre' => 'Iluminacion LED sumergible',
-                'precio' => 65000,
-                'imagen' => 'led.jpg',
-                'activo' => 1,
-            ),
-            array(
-                'nombre' => 'Anclaje de fondo',
-                'precio' => 120000,
-                'imagen' => 'anclaje.jpg',
-                'activo' => 1,
-            ),
-        );
-        update_option( 'cot_accesorios', $default_accesorios );
+        update_option( 'cot_accesorios', cot_online_get_full_accessory_list() );
     }
     if ( false === get_option( 'cot_admin_email' ) ) {
         update_option( 'cot_admin_email', 'info@muelleflotante.cl' );
@@ -124,34 +85,100 @@ function cot_online_init() {
 add_action( 'plugins_loaded', 'cot_online_init' );
 
 /**
- * Backfill accessory images for existing installs
+ * Return the tiered pricing table for m².
+ * Keys = m² breakpoints, values = price per m² in CLP.
+ *
+ * @return array
  */
-function cot_online_backfill_accessory_images() {
-    $accesorios = get_option( 'cot_accesorios', array() );
-    if ( ! is_array( $accesorios ) ) {
-        return;
-    }
-
-    $map = array(
-        'Cornamusa de amarre'          => 'cornamusa.jpg',
-        'Defensa lateral'             => 'defensa.jpg',
-        'Escala de acceso'            => 'escala.jpg',
-        'Soporte para kayak'          => 'kayak.jpg',
-        'Iluminacion LED sumergible'  => 'led.jpg',
-        'Anclaje de fondo'            => 'anclaje.jpg',
+function cot_online_get_precio_m2_tiers() {
+    return array(
+        10 => 265000,
+        15 => 255000,
+        20 => 245000,
+        25 => 235000,
+        30 => 225000,
+        35 => 220000,
+        40 => 215000,
+        45 => 210000,
+        50 => 200000,
+        55 => 195000,
+        60 => 190000,
     );
+}
 
-    $changed = false;
-    foreach ( $accesorios as $i => $acc ) {
-        $nombre = isset( $acc['nombre'] ) ? $acc['nombre'] : '';
-        if ( empty( $acc['imagen'] ) && ! empty( $nombre ) && isset( $map[ $nombre ] ) ) {
-            $accesorios[ $i ]['imagen'] = $map[ $nombre ];
-            $changed = true;
+/**
+ * Get the price per m² for a given number of square meters.
+ * Uses tiered pricing: 10-60 m² have specific prices,
+ * 65+ m² (including above 130) = $185,000.
+ *
+ * @param int $metros Number of square meters.
+ * @return int Price per m² in CLP.
+ */
+function cot_online_get_price_per_m2( $metros ) {
+    $metros = intval( $metros );
+    if ( $metros >= 65 ) {
+        return 185000;
+    }
+    $tiers = cot_online_get_precio_m2_tiers();
+    if ( isset( $tiers[ $metros ] ) ) {
+        return $tiers[ $metros ];
+    }
+    // Fallback: find closest lower tier
+    krsort( $tiers );
+    foreach ( $tiers as $m2 => $precio ) {
+        if ( $metros >= $m2 ) {
+            return $precio;
         }
     }
+    return 265000; // default for < 10
+}
 
-    if ( $changed ) {
-        update_option( 'cot_accesorios', $accesorios );
+/**
+ * Return the full default accessory list with images.
+ *
+ * @return array
+ */
+function cot_online_get_full_accessory_list() {
+    return array(
+        array( 'nombre' => 'Cornamusa de amarre',              'precio' => 25000,  'imagen' => 'cornamusa.jpg',            'activo' => 1 ),
+        array( 'nombre' => 'Cornamusa de amarre (negra)',       'precio' => 25000,  'imagen' => 'cornamusa_negra.jpg',      'activo' => 1 ),
+        array( 'nombre' => 'Cornamusa de amarre (acero)',       'precio' => 35000,  'imagen' => 'cornamusa_acero.jpg',      'activo' => 1 ),
+        array( 'nombre' => 'Cornamusa pequena',                 'precio' => 15000,  'imagen' => 'cornamusa_pequena.jpg',    'activo' => 1 ),
+        array( 'nombre' => 'Defensa lateral grande (roja)',     'precio' => 45000,  'imagen' => 'defensa_grande_roja.jpg',  'activo' => 1 ),
+        array( 'nombre' => 'Defensa lateral grande (gris)',     'precio' => 45000,  'imagen' => 'defensa_grande_gris.jpg',  'activo' => 1 ),
+        array( 'nombre' => 'Defensa lateral pequena (roja)',    'precio' => 25000,  'imagen' => 'defensa_pequena_roja.jpg', 'activo' => 1 ),
+        array( 'nombre' => 'Defensa lateral pequena (gris)',    'precio' => 25000,  'imagen' => 'defensa_pequena_gris.jpg', 'activo' => 1 ),
+        array( 'nombre' => 'Escala de acceso',                  'precio' => 180000, 'imagen' => 'escala.jpg',               'activo' => 1 ),
+        array( 'nombre' => 'Baranda con PPR',                   'precio' => 50000,  'imagen' => 'baranda_ppr.jpg',          'activo' => 1 ),
+        array( 'nombre' => 'Baranda con cuerda',                'precio' => 45000,  'imagen' => 'baranda_cuerda.jpg',       'activo' => 1 ),
+        array( 'nombre' => 'Guia de pilote',                    'precio' => 120000, 'imagen' => 'guia_pilote.jpg',          'activo' => 1 ),
+        array( 'nombre' => 'Soporte de pontoon',                'precio' => 15000,  'imagen' => 'soporte_pontoon.jpg',      'activo' => 1 ),
+        array( 'nombre' => 'Bola anticolision',                 'precio' => 40000,  'imagen' => 'bola_anticolision.jpg',    'activo' => 1 ),
+        array( 'nombre' => 'Placa de anclaje',                  'precio' => 30000,  'imagen' => 'placa_anclaje.jpg',        'activo' => 1 ),
+        array( 'nombre' => 'Winche manual pequeno',             'precio' => 95000,  'imagen' => 'winche_pequeno.jpg',       'activo' => 1 ),
+        array( 'nombre' => 'Winche manual grande',              'precio' => 120000, 'imagen' => 'winche_grande.jpg',        'activo' => 1 ),
+        array( 'nombre' => 'Conector mushroom',                 'precio' => 5000,   'imagen' => 'mushroom.jpg',             'activo' => 1 ),
+        array( 'nombre' => 'Pin de acero corto',                'precio' => 8000,   'imagen' => 'pin_acero.jpg',            'activo' => 1 ),
+        array( 'nombre' => 'Pin V de conexion',                 'precio' => 5000,   'imagen' => 'pin_v.jpg',                'activo' => 1 ),
+        array( 'nombre' => 'Pin largo (doble capa)',            'precio' => 10000,  'imagen' => 'pin_largo.jpg',            'activo' => 1 ),
+        array( 'nombre' => 'Perno de conexion',                 'precio' => 4000,   'imagen' => 'perno_conexion.jpg',       'activo' => 1 ),
+        array( 'nombre' => 'Perno largo (doble capa)',          'precio' => 6000,   'imagen' => 'perno_largo.jpg',          'activo' => 1 ),
+        array( 'nombre' => 'Arandela doble',                    'precio' => 2000,   'imagen' => 'arandela_doble.jpg',       'activo' => 1 ),
+        array( 'nombre' => 'Arandela simple',                   'precio' => 1500,   'imagen' => 'arandela_simple.jpg',      'activo' => 1 ),
+        array( 'nombre' => 'Martillo de goma (herramienta)',    'precio' => 8000,   'imagen' => 'martillo.jpg',             'activo' => 1 ),
+        array( 'nombre' => 'Llave de armado (herramienta)',     'precio' => 12000,  'imagen' => 'llave.jpg',                'activo' => 1 ),
+    );
+}
+
+/**
+ * Upgrade accessory list for existing installs (v1.1.0).
+ * Replaces the old 6-item list with the complete 27-item list.
+ */
+function cot_online_upgrade_accessories() {
+    $db_version = get_option( 'cot_online_db_version', '1.0.0' );
+    if ( version_compare( $db_version, '1.2.0', '<' ) ) {
+        update_option( 'cot_accesorios', cot_online_get_full_accessory_list() );
+        update_option( 'cot_online_db_version', '1.2.0' );
     }
 }
-add_action( 'plugins_loaded', 'cot_online_backfill_accessory_images', 20 );
+add_action( 'plugins_loaded', 'cot_online_upgrade_accessories', 20 );
