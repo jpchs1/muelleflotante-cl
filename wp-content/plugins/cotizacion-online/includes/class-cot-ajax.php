@@ -57,8 +57,8 @@ class COT_Ajax {
             wp_send_json_error( array( 'message' => implode( '<br>', $errors ) ) );
         }
 
-        // Get pricing
-        $precio_m2          = COT_ONLINE_PRECIO_M2;
+        // Get tiered pricing
+        $precio_m2 = cot_online_get_price_per_m2( $metros );
 
         // Calculate m2 subtotal
         $subtotal_m2 = $metros * $precio_m2;

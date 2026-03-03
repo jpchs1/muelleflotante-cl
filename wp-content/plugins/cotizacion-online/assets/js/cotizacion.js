@@ -18,6 +18,19 @@
         }
     }
 
+    // Get tiered price per m2
+    function getPrecioM2(metros) {
+        if (metros >= 65) return parseInt(cotData.precio_m2_default) || 185000;
+        var tiers = cotData.precio_m2_tiers || {};
+        if (tiers[metros]) return parseInt(tiers[metros]);
+        // Find closest lower tier
+        var keys = Object.keys(tiers).map(Number).sort(function(a, b) { return b - a; });
+        for (var i = 0; i < keys.length; i++) {
+            if (metros >= keys[i]) return parseInt(tiers[keys[i]]);
+        }
+        return 265000;
+    }
+
     /**
      * Recalculate all totals in real-time
      */
@@ -29,8 +42,12 @@
             $('#cot_metros').val(metros);
         }
 
-        // Subtotal m2
-        var subtotalM2 = metros * cotData.precio_m2;
+        // Tiered price per m2
+        var precioM2 = getPrecioM2(metros);
+        var subtotalM2 = metros * precioM2;
+
+        // Update price per m2 display
+        $('#cot-precio-m2-display').text(formatCLP(precioM2) + '/m\u00B2');
 
         // Accessories total
         var totalAcc = 0;

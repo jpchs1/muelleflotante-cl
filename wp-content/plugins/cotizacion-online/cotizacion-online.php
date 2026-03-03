@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Cotizacion Online - Muelle Flotante
  * Description: Cotizador online de muelles flotantes con calculo en tiempo real, almacenamiento de cotizaciones y envio de emails automaticos.
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Muelle Flotante
  * Text Domain: cotizacion-online
  * Domain Path: /languages
@@ -12,8 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'COT_ONLINE_VERSION', '1.1.0' );
-define( 'COT_ONLINE_PRECIO_M2', 290000 );
+define( 'COT_ONLINE_VERSION', '1.2.0' );
 define( 'COT_ONLINE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'COT_ONLINE_URL', plugin_dir_url( __FILE__ ) );
 
@@ -86,6 +85,55 @@ function cot_online_init() {
 add_action( 'plugins_loaded', 'cot_online_init' );
 
 /**
+ * Return the tiered pricing table for m².
+ * Keys = m² breakpoints, values = price per m² in CLP.
+ *
+ * @return array
+ */
+function cot_online_get_precio_m2_tiers() {
+    return array(
+        10 => 265000,
+        15 => 255000,
+        20 => 245000,
+        25 => 235000,
+        30 => 225000,
+        35 => 220000,
+        40 => 215000,
+        45 => 210000,
+        50 => 200000,
+        55 => 195000,
+        60 => 190000,
+    );
+}
+
+/**
+ * Get the price per m² for a given number of square meters.
+ * Uses tiered pricing: 10-60 m² have specific prices,
+ * 65+ m² (including above 130) = $185,000.
+ *
+ * @param int $metros Number of square meters.
+ * @return int Price per m² in CLP.
+ */
+function cot_online_get_price_per_m2( $metros ) {
+    $metros = intval( $metros );
+    if ( $metros >= 65 ) {
+        return 185000;
+    }
+    $tiers = cot_online_get_precio_m2_tiers();
+    if ( isset( $tiers[ $metros ] ) ) {
+        return $tiers[ $metros ];
+    }
+    // Fallback: find closest lower tier
+    krsort( $tiers );
+    foreach ( $tiers as $m2 => $precio ) {
+        if ( $metros >= $m2 ) {
+            return $precio;
+        }
+    }
+    return 265000; // default for < 10
+}
+
+/**
  * Return the full default accessory list with images.
  *
  * @return array
@@ -128,9 +176,9 @@ function cot_online_get_full_accessory_list() {
  */
 function cot_online_upgrade_accessories() {
     $db_version = get_option( 'cot_online_db_version', '1.0.0' );
-    if ( version_compare( $db_version, '1.1.0', '<' ) ) {
+    if ( version_compare( $db_version, '1.2.0', '<' ) ) {
         update_option( 'cot_accesorios', cot_online_get_full_accessory_list() );
-        update_option( 'cot_online_db_version', '1.1.0' );
+        update_option( 'cot_online_db_version', '1.2.0' );
     }
 }
 add_action( 'plugins_loaded', 'cot_online_upgrade_accessories', 20 );
