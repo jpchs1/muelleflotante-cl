@@ -7,7 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-$precio_m2          = COT_ONLINE_PRECIO_M2; // precio fijo
+$tiers              = cot_online_get_precio_m2_tiers();
+$precio_m2_display  = ! empty( $tiers ) ? '$' . number_format( max( $tiers ), 0, ',', '.' ) . ' – $' . number_format( min( $tiers ), 0, ',', '.' ) : 'N/A';
 $admin_email        = get_option( 'cot_admin_email', 'info@muelleflotante.cl' );
 $admin_pricing_password_set = (string) get_option( 'cot_admin_pricing_password', '' ) !== '';
 $accesorios         = get_option( 'cot_accesorios', array() );
@@ -26,8 +27,8 @@ $accesorios         = get_option( 'cot_accesorios', array() );
                 <tr>
                     <th><label for="cot_precio_m2">Precio por m&sup2; (CLP)</label></th>
                     <td>
-                        <input type="number" id="cot_precio_m2" value="<?php echo esc_attr( $precio_m2 ); ?>" class="regular-text" min="0" step="1" disabled>
-                        <p class="description">Precio unitario por cada metro cuadrado de muelle flotante. Minimo cotizable: 10 m&sup2;, incrementos de 5 m&sup2;.</p>
+                        <input type="text" id="cot_precio_m2" value="<?php echo esc_attr( $precio_m2_display ); ?> CLP" class="regular-text" disabled>
+                        <p class="description">Precios escalonados por m&sup2; (10-60 m&sup2; segun tabla, 65+ m&sup2; = $185.000). Minimo cotizable: 10 m&sup2;, incrementos de 5 m&sup2;.</p>
                     </td>
                 </tr>
             </table>

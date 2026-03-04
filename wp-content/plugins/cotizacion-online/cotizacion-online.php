@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Cotizacion Online - Muelle Flotante
  * Description: Cotizador online de muelles flotantes con calculo en tiempo real, almacenamiento de cotizaciones y envio de emails automaticos.
- * Version: 1.4.0
+ * Version: 1.4.1
  * Author: Muelle Flotante
  * Text Domain: cotizacion-online
  * Domain Path: /languages
@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'COT_ONLINE_VERSION', '1.4.0' );
+define( 'COT_ONLINE_VERSION', '1.4.1' );
 define( 'COT_ONLINE_PATH', plugin_dir_path( __FILE__ ) );
 define( 'COT_ONLINE_URL', plugin_dir_url( __FILE__ ) );
 
