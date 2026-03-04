@@ -18,6 +18,9 @@
         }
     }
 
+    // Set after vendor password unlock (server-validated nonce)
+    var adminPricingNonce = null;
+
     // Get tiered price per m2
     function getPrecioM2(metros) {
         if (metros >= 65) return parseInt(cotData.precio_m2_default) || 185000;
@@ -68,8 +71,16 @@
             card.find('.cot-acc-subtotal-value').text(formatCLP(lineTotal));
         });
 
+        // Admin pricing (flete + installation)
+        var fletePrecio = 0;
+        var instalacionPrecio = 0;
+        if (adminPricingNonce) {
+            fletePrecio = parseInt($('#cot_flete_precio').val()) || 0;
+            instalacionPrecio = parseInt($('#cot_instalacion_precio').val()) || 0;
+        }
+
         // Total
-        var totalSantiago = subtotalM2 + totalAcc;
+        var totalSantiago = subtotalM2 + totalAcc + fletePrecio + instalacionPrecio;
 
         // Update UI
         $('#cot-subtotal-m2').text(formatCLP(subtotalM2));
@@ -77,11 +88,30 @@
         $('#cot-summary-m2').text(metros);
         $('#cot-summary-subtotal-m2').text(formatCLP(subtotalM2));
         $('#cot-summary-accesorios').text(formatCLP(totalAcc));
+
+        // Flete row in summary
+        if (adminPricingNonce && fletePrecio > 0) {
+            $('#cot-summary-flete-row').show();
+            $('#cot-summary-flete').text(formatCLP(fletePrecio));
+        } else {
+            $('#cot-summary-flete-row').hide();
+        }
+
+        // Installation row in summary
+        if (adminPricingNonce && instalacionPrecio > 0) {
+            $('#cot-summary-instalacion-row').show();
+            $('#cot-summary-instalacion').text(formatCLP(instalacionPrecio));
+            $('#cot-summary-armado-row').show();
+        } else {
+            $('#cot-summary-instalacion-row').hide();
+            $('#cot-summary-armado-row').hide();
+        }
+
         $('#cot-summary-total').text(formatCLP(totalSantiago));
 
         // Flete badge
         var entregaTipo = $('input[name="entrega_tipo"]:checked').val();
-        if (entregaTipo === 'otra') {
+        if (entregaTipo === 'otra' && fletePrecio <= 0) {
             $('#cot-summary-flete-badge').show();
         } else {
             $('#cot-summary-flete-badge').hide();
@@ -143,6 +173,62 @@
             var val = parseInt($(this).val()) || 1;
             if (val < 1) $(this).val(1);
             if (val > 99) $(this).val(99);
+            recalculate();
+        });
+
+        // Admin pricing unlock
+        $('#cot-admin-unlock-btn').on('click', function() {
+            var $btn = $(this);
+            var pwd = $('#cot_admin_password').val();
+
+            $('#cot-admin-password-error').hide();
+
+            if (!pwd) {
+                $('#cot_admin_password').focus();
+                return;
+            }
+
+            $btn.prop('disabled', true);
+
+            $.ajax({
+                url: cotData.ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'cot_validate_admin_pricing',
+                    nonce: cotData.nonce,
+                    password: pwd
+                },
+                success: function(response) {
+                    if (response && response.success && response.data && response.data.admin_pricing_nonce) {
+                        adminPricingNonce = response.data.admin_pricing_nonce;
+                        $('#cot-admin-lock').hide();
+                        $('#cot-admin-fields').show();
+                        $('#cot-admin-password-error').hide();
+                        recalculate();
+                    } else {
+                        $('#cot-admin-password-error').show();
+                        $('#cot_admin_password').val('').focus();
+                    }
+                },
+                error: function() {
+                    $('#cot-admin-password-error').text('Error de conexion').show();
+                },
+                complete: function() {
+                    $btn.prop('disabled', false);
+                }
+            });
+        });
+
+        // Allow Enter key to unlock
+        $('#cot_admin_password').on('keypress', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $('#cot-admin-unlock-btn').click();
+            }
+        });
+
+        // Flete & installation price change
+        $('#cot_flete_precio, #cot_instalacion_precio').on('input change', function() {
             recalculate();
         });
 
@@ -233,6 +319,21 @@
                 formData.entrega_ciudad = $('#cot_entrega_ciudad').val();
                 formData.entrega_direccion = $('#cot_entrega_direccion').val();
                 formData.entrega_comentarios = $('#cot_entrega_comentarios').val();
+            }
+
+            // Admin pricing fields (flete + installation)
+            if (adminPricingNonce) {
+                var fletePrecio = parseInt($('#cot_flete_precio').val()) || 0;
+                var instalacionPrecio = parseInt($('#cot_instalacion_precio').val()) || 0;
+
+                formData.admin_pricing_nonce = adminPricingNonce;
+
+                if (fletePrecio > 0) {
+                    formData.flete_precio = fletePrecio;
+                }
+                if (instalacionPrecio > 0) {
+                    formData.instalacion_precio = instalacionPrecio;
+                }
             }
 
             // AJAX submit

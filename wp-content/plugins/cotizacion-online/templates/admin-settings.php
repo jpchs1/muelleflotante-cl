@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $precio_m2          = COT_ONLINE_PRECIO_M2; // precio fijo
 $admin_email        = get_option( 'cot_admin_email', 'info@muelleflotante.cl' );
+$admin_pricing_password_set = (string) get_option( 'cot_admin_pricing_password', '' ) !== '';
 $accesorios         = get_option( 'cot_accesorios', array() );
 ?>
 
@@ -40,6 +41,26 @@ $accesorios         = get_option( 'cot_accesorios', array() );
                     <td>
                         <input type="email" id="cot_admin_email" name="cot_admin_email" value="<?php echo esc_attr( $admin_email ); ?>" class="regular-text">
                         <p class="description">Email donde se recibiran las nuevas cotizaciones.</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card" style="max-width:800px;padding:20px;margin-bottom:20px;">
+            <h2>Clave Seccion Vendedor</h2>
+            <p class="description">Clave para desbloquear la seccion protegida del formulario (Flete / Instalacion).</p>
+            <table class="form-table">
+                <tr>
+                    <th><label for="cot_admin_pricing_password">Clave</label></th>
+                    <td>
+                        <input type="password" id="cot_admin_pricing_password" name="cot_admin_pricing_password" value="" class="regular-text" autocomplete="new-password">
+                        <p class="description">
+                            <?php if ( $admin_pricing_password_set ) : ?>
+                                Actualmente: <strong>configurada</strong>. Deja en blanco para mantenerla.
+                            <?php else : ?>
+                                Actualmente: <strong>no configurada</strong>. Debes configurarla para usar la seccion protegida.
+                            <?php endif; ?>
+                        </p>
                     </td>
                 </tr>
             </table>
