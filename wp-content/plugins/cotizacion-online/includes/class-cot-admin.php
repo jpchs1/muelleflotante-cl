@@ -59,10 +59,28 @@ class COT_Admin {
             'sanitize_callback' => 'sanitize_email',
             'default'           => 'info@muelleflotante.cl',
         ) );
+
+        register_setting( 'cot_settings_group', 'cot_admin_pricing_password', array(
+            'type'              => 'string',
+            'sanitize_callback' => array( $this, 'sanitize_admin_pricing_password' ),
+            'default'           => '',
+        ) );
         register_setting( 'cot_settings_group', 'cot_accesorios', array(
             'type'              => 'array',
             'sanitize_callback' => array( $this, 'sanitize_accesorios' ),
         ) );
+    }
+
+    /**
+     * Sanitize admin pricing password.
+     * If blank, keep existing password.
+     */
+    public function sanitize_admin_pricing_password( $input ) {
+        $input = is_string( $input ) ? trim( $input ) : '';
+        if ( $input === '' ) {
+            return (string) get_option( 'cot_admin_pricing_password', '' );
+        }
+        return sanitize_text_field( $input );
     }
 
     /**
@@ -133,6 +151,8 @@ class COT_Admin {
         $accesorios  = isset( $meta['_cot_accesorios'][0] ) ? maybe_unserialize( $meta['_cot_accesorios'][0] ) : array();
         $total_acc   = isset( $meta['_cot_total_accesorios'][0] ) ? $meta['_cot_total_accesorios'][0] : 0;
         $total_stgo  = isset( $meta['_cot_total_santiago'][0] ) ? $meta['_cot_total_santiago'][0] : 0;
+        $flete_precio = isset( $meta['_cot_flete_precio'][0] ) ? $meta['_cot_flete_precio'][0] : 0;
+        $instalacion_precio = isset( $meta['_cot_instalacion_precio'][0] ) ? $meta['_cot_instalacion_precio'][0] : 0;
         $entrega     = isset( $meta['_cot_entrega_tipo'][0] ) ? $meta['_cot_entrega_tipo'][0] : 'santiago';
         $region      = isset( $meta['_cot_entrega_region'][0] ) ? $meta['_cot_entrega_region'][0] : '';
         $ciudad      = isset( $meta['_cot_entrega_ciudad'][0] ) ? $meta['_cot_entrega_ciudad'][0] : '';
@@ -192,7 +212,16 @@ class COT_Admin {
 
         <h3 class="cot-section-title">Totales</h3>
         <table class="cot-detail-table">
-            <tr><th>Total Cotizacion (sin flete)</th><td><strong style="font-size:16px;">$<?php echo esc_html( number_format( intval( $total_stgo ), 0, ',', '.' ) ); ?> CLP</strong></td></tr>
+            <tr><th>Subtotal m&sup2;</th><td>$<?php echo esc_html( number_format( intval( $subtotal_m2 ), 0, ',', '.' ) ); ?> CLP</td></tr>
+            <tr><th>Total Accesorios</th><td>$<?php echo esc_html( number_format( intval( $total_acc ), 0, ',', '.' ) ); ?> CLP</td></tr>
+            <?php if ( intval( $flete_precio ) > 0 ) : ?>
+                <tr><th>Flete</th><td>$<?php echo esc_html( number_format( intval( $flete_precio ), 0, ',', '.' ) ); ?> CLP</td></tr>
+            <?php endif; ?>
+            <?php if ( intval( $instalacion_precio ) > 0 ) : ?>
+                <tr><th>Instalacion (muertos + fijado a tierra)</th><td>$<?php echo esc_html( number_format( intval( $instalacion_precio ), 0, ',', '.' ) ); ?> CLP</td></tr>
+                <tr><th>Armado</th><td><strong style="color:#27ae60;">GRATIS</strong></td></tr>
+            <?php endif; ?>
+            <tr><th>Total Cotizacion</th><td><strong style="font-size:16px;">$<?php echo esc_html( number_format( intval( $total_stgo ), 0, ',', '.' ) ); ?> CLP</strong></td></tr>
         </table>
 
         <h3 class="cot-section-title">Entrega</h3>
@@ -200,7 +229,9 @@ class COT_Admin {
             <tr>
                 <th>Tipo de entrega</th>
                 <td>
-                    <?php if ( $entrega === 'otra' ) : ?>
+                    <?php if ( intval( $flete_precio ) > 0 ) : ?>
+                        <span class="cot-badge-santiago">Flete incluido</span>
+                    <?php elseif ( $entrega === 'otra' ) : ?>
                         <span class="cot-badge-flete">Flete por cotizar</span>
                     <?php else : ?>
                         <span class="cot-badge-santiago">Sin flete</span>

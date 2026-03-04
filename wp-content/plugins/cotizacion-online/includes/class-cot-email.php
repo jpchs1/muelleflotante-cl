@@ -124,17 +124,34 @@ class COT_Email {
         $body .= '<table style="width:100%;">';
         $body .= '<tr><td style="padding:4px 0;font-size:13px;">Subtotal m&sup2;:</td><td style="padding:4px 0;font-size:13px;text-align:right;">' . $this->format_clp( $data['subtotal_m2'] ) . '</td></tr>';
         $body .= '<tr><td style="padding:4px 0;font-size:13px;">Accesorios:</td><td style="padding:4px 0;font-size:13px;text-align:right;">' . $this->format_clp( $data['total_accesorios'] ) . '</td></tr>';
+        if ( ! empty( $data['flete_precio'] ) && $data['flete_precio'] > 0 ) {
+            $body .= '<tr><td style="padding:4px 0;font-size:13px;">Flete:</td><td style="padding:4px 0;font-size:13px;text-align:right;">' . $this->format_clp( $data['flete_precio'] ) . '</td></tr>';
+        }
+        if ( ! empty( $data['instalacion_precio'] ) && $data['instalacion_precio'] > 0 ) {
+            $body .= '<tr><td style="padding:4px 0;font-size:13px;">Instalacion (muertos + fijado a tierra):</td><td style="padding:4px 0;font-size:13px;text-align:right;">' . $this->format_clp( $data['instalacion_precio'] ) . '</td></tr>';
+            $body .= '<tr><td style="padding:4px 0;font-size:13px;">Armado:</td><td style="padding:4px 0;font-size:13px;text-align:right;color:#27ae60;"><strong>GRATIS</strong></td></tr>';
+        }
         $body .= '<tr><td colspan="2" style="border-top:1px solid #27ae60;padding-top:8px;"></td></tr>';
-        $body .= '<tr><td style="padding:4px 0;font-size:16px;"><strong>Total Cotizacion (sin flete):</strong></td><td style="padding:4px 0;font-size:16px;text-align:right;color:#27ae60;"><strong>' . $this->format_clp( $data['total_santiago'] ) . ' CLP</strong></td></tr>';
+        $body .= '<tr><td style="padding:4px 0;font-size:16px;"><strong>Total Cotizacion:</strong></td><td style="padding:4px 0;font-size:16px;text-align:right;color:#27ae60;"><strong>' . $this->format_clp( $data['total_santiago'] ) . ' CLP</strong></td></tr>';
         $body .= '</table>';
         $body .= '</div>';
 
         // Delivery
         $body .= '<h2 style="color:#1a3a5c;font-size:16px;border-bottom:1px solid #ddd;padding-bottom:8px;">Entrega</h2>';
+
+        $flete_incluido = ( ! empty( $data['flete_precio'] ) && intval( $data['flete_precio'] ) > 0 );
+
         if ( $data['entrega_tipo'] === 'otra' ) {
-            $body .= '<div style="background:#fdf2e9;border-left:4px solid #e67e22;padding:12px 15px;margin-bottom:15px;">';
-            $body .= '<strong style="color:#e67e22;">Flete a otra ubicacion: POR COTIZAR</strong>';
-            $body .= '</div>';
+            if ( $flete_incluido ) {
+                $body .= '<div style="background:#e8f8f0;border-left:4px solid #27ae60;padding:12px 15px;margin-bottom:15px;">';
+                $body .= '<strong style="color:#27ae60;">Flete a otra ubicacion: INCLUIDO</strong>';
+                $body .= '</div>';
+            } else {
+                $body .= '<div style="background:#fdf2e9;border-left:4px solid #e67e22;padding:12px 15px;margin-bottom:15px;">';
+                $body .= '<strong style="color:#e67e22;">Flete a otra ubicacion: POR COTIZAR</strong>';
+                $body .= '</div>';
+            }
+
             $body .= '<table style="width:100%;margin-bottom:15px;">';
             $body .= '<tr><td style="padding:4px 0;font-size:13px;color:#666;width:130px;">Region:</td><td style="padding:4px 0;font-size:13px;">' . esc_html( $data['entrega_region'] ) . '</td></tr>';
             $body .= '<tr><td style="padding:4px 0;font-size:13px;color:#666;">Ciudad/Comuna:</td><td style="padding:4px 0;font-size:13px;">' . esc_html( $data['entrega_ciudad'] ) . '</td></tr>';
@@ -145,7 +162,7 @@ class COT_Email {
             $body .= '</table>';
         } else {
             $body .= '<div style="background:#e8f8f0;border-left:4px solid #27ae60;padding:12px 15px;">';
-            $body .= '<strong style="color:#27ae60;">Solo mercaderia (sin flete)</strong>';
+            $body .= '<strong style="color:#27ae60;">Mercaderia (Puesto Santiago)</strong>';
             $body .= '</div>';
         }
 
@@ -199,16 +216,32 @@ class COT_Email {
 
         // Total
         $body .= '<div style="background:#f0f7ec;border:2px solid #27ae60;border-radius:6px;padding:15px;margin:20px 0;text-align:center;">';
-        $body .= '<p style="margin:0 0 5px;font-size:13px;color:#555;">Total Cotizacion (sin flete)</p>';
+        if ( ! empty( $data['flete_precio'] ) && $data['flete_precio'] > 0 ) {
+            $body .= '<p style="margin:0 0 3px;font-size:13px;color:#555;">Flete: ' . $this->format_clp( $data['flete_precio'] ) . '</p>';
+        }
+        if ( ! empty( $data['instalacion_precio'] ) && $data['instalacion_precio'] > 0 ) {
+            $body .= '<p style="margin:0 0 3px;font-size:13px;color:#555;">Instalacion: ' . $this->format_clp( $data['instalacion_precio'] ) . '</p>';
+            $body .= '<p style="margin:0 0 3px;font-size:13px;color:#27ae60;">Armado: <strong>GRATIS</strong></p>';
+        }
+        $body .= '<p style="margin:5px 0 0;font-size:13px;color:#555;">Total Cotizacion</p>';
         $body .= '<p style="margin:0;font-size:22px;color:#27ae60;"><strong>' . $this->format_clp( $data['total_santiago'] ) . ' CLP</strong></p>';
         $body .= '</div>';
 
         // Freight note
         if ( $data['entrega_tipo'] === 'otra' ) {
-            $body .= '<div style="background:#fdf2e9;border-left:4px solid #e67e22;padding:12px 15px;margin-bottom:20px;">';
-            $body .= '<p style="margin:0;font-size:13px;"><strong style="color:#e67e22;">Flete a otra ubicacion solicitado</strong></p>';
-            $body .= '<p style="margin:5px 0 0;font-size:13px;color:#555;">Te contactaremos con el valor del flete a ' . esc_html( $data['entrega_region'] ) . '.</p>';
-            $body .= '</div>';
+            $flete_incluido = ( ! empty( $data['flete_precio'] ) && intval( $data['flete_precio'] ) > 0 );
+
+            if ( $flete_incluido ) {
+                $body .= '<div style="background:#e8f8f0;border-left:4px solid #27ae60;padding:12px 15px;margin-bottom:20px;">';
+                $body .= '<p style="margin:0;font-size:13px;"><strong style="color:#27ae60;">Flete a otra ubicacion incluido</strong></p>';
+                $body .= '<p style="margin:5px 0 0;font-size:13px;color:#555;">Direccion: ' . esc_html( $data['entrega_region'] ) . ', ' . esc_html( $data['entrega_ciudad'] ) . ', ' . esc_html( $data['entrega_direccion'] ) . '.</p>';
+                $body .= '</div>';
+            } else {
+                $body .= '<div style="background:#fdf2e9;border-left:4px solid #e67e22;padding:12px 15px;margin-bottom:20px;">';
+                $body .= '<p style="margin:0;font-size:13px;"><strong style="color:#e67e22;">Flete a otra ubicacion solicitado</strong></p>';
+                $body .= '<p style="margin:5px 0 0;font-size:13px;color:#555;">Te contactaremos con el valor del flete a ' . esc_html( $data['entrega_region'] ) . '.</p>';
+                $body .= '</div>';
+            }
         }
 
         // Disclaimer

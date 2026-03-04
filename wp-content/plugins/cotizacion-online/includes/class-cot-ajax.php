@@ -12,6 +12,39 @@ class COT_Ajax {
     public function __construct() {
         add_action( 'wp_ajax_cot_submit_cotizacion', array( $this, 'handle_submission' ) );
         add_action( 'wp_ajax_nopriv_cot_submit_cotizacion', array( $this, 'handle_submission' ) );
+
+        add_action( 'wp_ajax_cot_validate_admin_pricing', array( $this, 'validate_admin_pricing' ) );
+        add_action( 'wp_ajax_nopriv_cot_validate_admin_pricing', array( $this, 'validate_admin_pricing' ) );
+    }
+
+    /**
+     * Validate vendor password to unlock admin pricing fields.
+     */
+    public function validate_admin_pricing() {
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'cot_online_nonce' ) ) {
+            wp_send_json_error( array( 'message' => 'Error de seguridad.' ) );
+        }
+
+        $password = isset( $_POST['password'] ) ? sanitize_text_field( wp_unslash( $_POST['password'] ) ) : '';
+
+        $expected_password = '';
+        if ( defined( 'COT_ADMIN_PRICING_PASSWORD' ) ) {
+            $expected_password = (string) COT_ADMIN_PRICING_PASSWORD;
+        } else {
+            $expected_password = (string) get_option( 'cot_admin_pricing_password', '' );
+        }
+
+        if ( empty( $expected_password ) ) {
+            wp_send_json_error( array( 'message' => 'Clave no configurada. Configurala en Cotizaciones > Configuracion.' ) );
+        }
+
+        if ( hash_equals( $expected_password, $password ) ) {
+            wp_send_json_success( array(
+                'admin_pricing_nonce' => wp_create_nonce( 'cot_admin_pricing' ),
+            ) );
+        }
+
+        wp_send_json_error( array( 'message' => 'Clave incorrecta.' ) );
     }
 
     /**
@@ -108,9 +141,18 @@ class COT_Ajax {
             }
         }
 
+        // Admin pricing: flete and installation (requires server-validated nonce)
+        $flete_precio = 0;
+        $instalacion_precio = 0;
+        $admin_pricing_nonce = isset( $_POST['admin_pricing_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['admin_pricing_nonce'] ) ) : '';
+        if ( ! empty( $admin_pricing_nonce ) && wp_verify_nonce( $admin_pricing_nonce, 'cot_admin_pricing' ) ) {
+            $flete_precio = isset( $_POST['flete_precio'] ) ? absint( $_POST['flete_precio'] ) : 0;
+            $instalacion_precio = isset( $_POST['instalacion_precio'] ) ? absint( $_POST['instalacion_precio'] ) : 0;
+        }
+
         // Total
         $costo_stgo_calculado = 0;
-        $total_santiago = $subtotal_m2 + $total_accesorios;
+        $total_santiago = $subtotal_m2 + $total_accesorios + $flete_precio + $instalacion_precio;
 
         // Delivery info
         $entrega_tipo = isset( $_POST['entrega_tipo'] ) ? sanitize_text_field( wp_unslash( $_POST['entrega_tipo'] ) ) : 'santiago';
@@ -156,6 +198,8 @@ class COT_Ajax {
         update_post_meta( $post_id, '_cot_total_accesorios', $total_accesorios );
         update_post_meta( $post_id, '_cot_costo_santiago', $costo_stgo_calculado );
         update_post_meta( $post_id, '_cot_total_santiago', $total_santiago );
+        update_post_meta( $post_id, '_cot_flete_precio', $flete_precio );
+        update_post_meta( $post_id, '_cot_instalacion_precio', $instalacion_precio );
         update_post_meta( $post_id, '_cot_entrega_tipo', $entrega_tipo );
         update_post_meta( $post_id, '_cot_entrega_region', $entrega_region );
         update_post_meta( $post_id, '_cot_entrega_ciudad', $entrega_ciudad );
@@ -178,6 +222,8 @@ class COT_Ajax {
             'total_accesorios'      => $total_accesorios,
             'costo_santiago'        => $costo_stgo_calculado,
             'total_santiago'        => $total_santiago,
+            'flete_precio'          => $flete_precio,
+            'instalacion_precio'    => $instalacion_precio,
             'entrega_tipo'          => $entrega_tipo,
             'entrega_region'        => $entrega_region,
             'entrega_ciudad'        => $entrega_ciudad,

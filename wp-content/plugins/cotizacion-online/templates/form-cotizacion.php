@@ -216,10 +216,58 @@ if ( is_array( $accesorios ) ) {
             </div>
         </div>
 
-        <!-- Section 5: Summary -->
+        <!-- Section 5: Admin Pricing (password-protected) -->
+        <div class="cot-section cot-section-admin-pricing">
+            <div class="cot-section-header cot-section-header-admin">
+                <span class="cot-section-number">5</span>
+                <h2 class="cot-section-title">Costos Adicionales (Solo Vendedor)</h2>
+            </div>
+            <div class="cot-section-body">
+                <div id="cot-admin-lock" class="cot-admin-lock">
+                    <div class="cot-admin-lock-icon">
+                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#1a3a5c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                    <p class="cot-admin-lock-text">Seccion protegida. Ingrese la clave para agregar costos de flete e instalacion.</p>
+                    <div class="cot-admin-password-row">
+                        <input type="password" id="cot_admin_password" class="cot-input cot-admin-password-input" placeholder="Ingrese clave de acceso">
+                        <button type="button" id="cot-admin-unlock-btn" class="cot-admin-unlock-btn">Desbloquear</button>
+                    </div>
+                    <div id="cot-admin-password-error" class="cot-admin-password-error" style="display:none;">Clave incorrecta</div>
+                </div>
+                <div id="cot-admin-fields" class="cot-admin-fields" style="display:none;">
+                    <div class="cot-admin-unlocked-badge">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#27ae60" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+                        <span>Seccion desbloqueada</span>
+                    </div>
+                    <div class="cot-admin-note">
+                        <p><strong>Nota:</strong> El armado del muelle esta <strong>incluido sin costo</strong>. La instalacion bajo el agua (muertos y fijado a tierra) tiene un costo adicional.</p>
+                    </div>
+                    <div class="cot-row">
+                        <div class="cot-col">
+                            <label for="cot_flete_precio" class="cot-label">Precio del Flete (CLP)</label>
+                            <p class="cot-helper">Costo de transporte/despacho al destino</p>
+                            <div class="cot-admin-price-input-wrapper">
+                                <span class="cot-admin-price-prefix">$</span>
+                                <input type="number" id="cot_flete_precio" name="flete_precio" class="cot-input cot-admin-price-input" min="0" step="1000" value="0" placeholder="0">
+                            </div>
+                        </div>
+                        <div class="cot-col">
+                            <label for="cot_instalacion_precio" class="cot-label">Costo de Instalacion (CLP)</label>
+                            <p class="cot-helper">Instalacion bajo el agua con muertos y fijado a tierra</p>
+                            <div class="cot-admin-price-input-wrapper">
+                                <span class="cot-admin-price-prefix">$</span>
+                                <input type="number" id="cot_instalacion_precio" name="instalacion_precio" class="cot-input cot-admin-price-input" min="0" step="1000" value="0" placeholder="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 6: Summary -->
         <div class="cot-section cot-section-summary">
             <div class="cot-section-header">
-                <span class="cot-section-number">5</span>
+                <span class="cot-section-number">6</span>
                 <h2 class="cot-section-title">Resumen de Cotizacion</h2>
             </div>
             <div class="cot-section-body">
@@ -231,6 +279,18 @@ if ( is_array( $accesorios ) ) {
                     <div class="cot-summary-row">
                         <span class="cot-summary-label">Accesorios:</span>
                         <span id="cot-summary-accesorios" class="cot-summary-value">$0</span>
+                    </div>
+                    <div id="cot-summary-flete-row" class="cot-summary-row" style="display:none;">
+                        <span class="cot-summary-label">Flete:</span>
+                        <span id="cot-summary-flete" class="cot-summary-value">$0</span>
+                    </div>
+                    <div id="cot-summary-instalacion-row" class="cot-summary-row" style="display:none;">
+                        <span class="cot-summary-label">Instalacion (muertos + fijado a tierra):</span>
+                        <span id="cot-summary-instalacion" class="cot-summary-value">$0</span>
+                    </div>
+                    <div id="cot-summary-armado-row" class="cot-summary-row cot-summary-armado" style="display:none;">
+                        <span class="cot-summary-label">Armado:</span>
+                        <span class="cot-summary-value cot-armado-gratis">GRATIS</span>
                     </div>
                     <div class="cot-summary-divider"></div>
                     <div class="cot-summary-row cot-summary-total">
