@@ -105,7 +105,10 @@ define( 'WPMS_SMTP_USER', 'info@muelleflotante.cl' );
 define( 'WPMS_SMTP_PASS', 'TU_CONTRASEÑA_SMTP_AQUI' );
 define( 'WPMS_SMTP_AUTOTLS', true );
 
-
+/** Anti-spam & security hardening */
+define( 'DISALLOW_FILE_EDIT', true );
+define( 'DISALLOW_UNFILTERED_UPLOADS', true );
+define( 'WP_POST_REVISIONS', 5 );
 
 /* That's all, stop editing! Happy publishing. */
 
