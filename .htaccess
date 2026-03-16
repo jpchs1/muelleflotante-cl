@@ -93,6 +93,104 @@ RewriteRule . /index.php [L]
 </IfModule>
 
 # END WordPress
+
+# ======================================================================
+# ANTI-SPAM & SECURITY - MUELLEFLOTANTE.CL
+# ======================================================================
+
+# --- Block XML-RPC ---
+<Files xmlrpc.php>
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+  </IfModule>
+</Files>
+
+# --- Block wp-trackback.php ---
+<Files wp-trackback.php>
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+  </IfModule>
+</Files>
+
+# --- Prevent PHP execution in uploads ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^wp-content/uploads/.*\.php$ - [F,L]
+</IfModule>
+
+# --- Block author enumeration ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{QUERY_STRING} ^author=([0-9]+) [NC]
+  RewriteRule .* - [F,L]
+</IfModule>
+
+# --- Block access to sensitive files ---
+<FilesMatch "(^#.*#|\.(bak|conf|dist|fla|in[ci]|log|psd|sh|sql|sw[op])|~)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+  </IfModule>
+</FilesMatch>
+
+# --- Protect wp-config.php ---
+<Files wp-config.php>
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order deny,allow
+    Deny from all
+  </IfModule>
+</Files>
+
+# --- Security Headers ---
+<IfModule mod_headers.c>
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-XSS-Protection "1; mode=block"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  Header set Permissions-Policy "geolocation=(self), microphone=(), camera=()"
+</IfModule>
+
+# --- Block malicious bots ---
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP_USER_AGENT} (ahrefs|semrush|mj12bot|dotbot|blexbot|rogerbot|megaindex|seopowersuite|baiduspider|yandexbot) [NC]
+  RewriteRule .* - [F,L]
+</IfModule>
+
+# --- Prevent directory browsing ---
+Options -Indexes
+
+# --- Disable server signature ---
+ServerSignature Off
+
+# --- GZIP Compression ---
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript text/xml text/plain
+  AddOutputFilterByType DEFLATE application/javascript application/x-javascript application/json
+  AddOutputFilterByType DEFLATE application/xml application/rss+xml application/atom+xml
+  AddOutputFilterByType DEFLATE image/svg+xml font/ttf font/otf font/woff font/woff2
+  AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+</IfModule>
+
+# ======================================================================
+# END ANTI-SPAM & SECURITY
+# ======================================================================
+
 # BEGIN LiteSpeed
 # The directives (lines) between "BEGIN LiteSpeed" and "END LiteSpeed" are
 # dynamically generated, and should only be modified via WordPress filters.
