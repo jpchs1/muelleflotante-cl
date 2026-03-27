@@ -1,0 +1,85 @@
+/* ============================================
+   AUTO-CAROUSEL: Estilos para la transformación
+   automática de la sección de blog de Elementor
+   ============================================ */
+
+.ipc-auto-carousel {
+    position: relative;
+    overflow: hidden;
+    padding-bottom: 16px;
+}
+
+/* Navegación */
+.ipc-auto-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.ipc-auto-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    background: #ffffff;
+    color: #1a3a5c;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+.ipc-auto-btn:hover {
+    background: #1a3a5c;
+    border-color: #1a3a5c;
+    color: #ffffff;
+}
+
+.ipc-auto-btn:active {
+    transform: scale(0.92);
+}
+
+/* Dots */
+.ipc-auto-dots {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.ipc-auto-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.ipc-auto-dot.active {
+    background: #1a3a5c;
+    width: 26px;
+    border-radius: 5px;
+}
+
+.ipc-auto-dot:hover:not(.active) {
+    background: #94a3b8;
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .ipc-auto-nav {
+        margin-top: 16px;
+    }
+
+    .ipc-auto-btn {
+        width: 36px;
+        height: 36px;
+    }
+}

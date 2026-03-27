@@ -136,6 +136,22 @@ class Imporlan_Premium_Content {
             IPC_VERSION,
             true
         );
+
+        // Auto-carousel: convierte la sección de Elementor "Últimas entradas del blog" en carrusel
+        wp_enqueue_style(
+            'ipc-auto-carousel-styles',
+            IPC_PLUGIN_URL . 'assets/css/auto-carousel.css',
+            [],
+            IPC_VERSION
+        );
+
+        wp_enqueue_script(
+            'ipc-auto-carousel-js',
+            IPC_PLUGIN_URL . 'assets/js/auto-carousel.js',
+            [],
+            IPC_VERSION,
+            true
+        );
     }
 
     /**
