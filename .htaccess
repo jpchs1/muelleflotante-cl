@@ -78,33 +78,20 @@ ExpiresByType font/woff2 A31557600
 ## LITESPEED WP CACHE PLUGIN - Do not edit the contents of this block! ##
 # END NON_LSCACHE
 
-# BEGIN Static Site Override
-# Serve index.html as the main page instead of WordPress
-DirectoryIndex index.html index.php
+# BEGIN WordPress
+# Las directivas (líneas) entre «BEGIN WordPress» y «END WordPress» son
+# generadas dinámicamente y solo deberían ser modificadas mediante filtros de WordPress.
+# Cualquier cambio en las directivas que hay entre esos marcadores serán sobrescritas.
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteBase /
-RewriteRule ^index\.html$ - [L]
-RewriteRule ^css/.*$ - [L]
-RewriteRule ^js/.*$ - [L]
-RewriteRule ^img/.*$ - [L]
+RewriteRule ^index\.php$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.html [L]
+RewriteRule . /index.php [L]
 </IfModule>
-# END Static Site Override
 
-# BEGIN WordPress (disabled - kept as backup)
-# <IfModule mod_rewrite.c>
-# RewriteEngine On
-# RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
-# RewriteBase /
-# RewriteRule ^index\.php$ - [L]
-# RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteRule . /index.php [L]
-# </IfModule>
 # END WordPress
 
 # ======================================================================
