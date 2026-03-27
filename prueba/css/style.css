@@ -782,12 +782,7 @@ a { color: inherit; text-decoration: none; }
     letter-spacing: 0.02em;
 }
 
-/* --- Footer Logo --- */
-.footer-logo {
-    height: 60px;
-    width: auto;
-    margin-bottom: 12px;
-}
+/* --- Footer Logo (used in tour section spacer) --- */
 
 /* --- Nearby / Location --- */
 .nearby-grid {
