@@ -1,5 +1,5 @@
 /* ============================================
-   Costa Colbun — Lake Life Style
+   Costa Colbun - Lake Life Style
    ============================================ */
 
 /* --- Reset & Base --- */
@@ -125,6 +125,18 @@ a { color: inherit; text-decoration: none; }
 
 .nav-logo { display: flex; align-items: center; }
 
+.nav-logo-img {
+    height: 50px;
+    width: auto;
+    transition: var(--transition);
+    filter: brightness(0) invert(1);
+}
+
+.scrolled .nav-logo-img {
+    filter: none;
+    height: 45px;
+}
+
 .logo-text {
     font-family: var(--font-display);
     font-size: 1.6rem;
@@ -227,7 +239,7 @@ a { color: inherit; text-decoration: none; }
     inset: 0;
     background:
         linear-gradient(180deg, rgba(12, 53, 71, 0.3) 0%, rgba(12, 53, 71, 0.5) 100%),
-        url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80') center/cover no-repeat;
+        url('https://costacolbun.cl/wp-content/uploads/2022/08/bgpanob.jpg') center/cover no-repeat;
     transform: scale(1.05);
     animation: heroZoom 20s ease-in-out infinite alternate;
 }
@@ -558,8 +570,8 @@ a { color: inherit; text-decoration: none; }
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(135deg, rgba(12, 53, 71, 0.95), rgba(26, 107, 138, 0.9)),
-        url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1920&q=80') center/cover;
+        linear-gradient(135deg, rgba(12, 53, 71, 0.92), rgba(26, 107, 138, 0.88)),
+        url('https://costacolbun.cl/wp-content/uploads/2025/08/VidadeLagoColbun.jpg') center/cover;
 }
 
 .section-lakelife .container {
@@ -718,6 +730,46 @@ a { color: inherit; text-decoration: none; }
 .lightbox-close { top: 20px; right: 24px; font-size: 2.5rem; }
 .lightbox-prev { left: 20px; top: 50%; transform: translateY(-50%); font-size: 3rem; }
 .lightbox-next { right: 20px; top: 50%; transform: translateY(-50%); font-size: 3rem; }
+
+/* --- Tour 360 --- */
+.section-tour {
+    background: var(--lake-deep);
+    color: var(--white);
+}
+
+.section-tour .section-label { color: var(--lake-sky); }
+.section-tour .section-title { color: var(--white); }
+.section-tour .section-desc { color: rgba(255, 255, 255, 0.75); }
+
+.tour-container {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    background: var(--gray-900);
+}
+
+.tour-container iframe {
+    display: block;
+    min-height: 400px;
+}
+
+.tour-hint {
+    text-align: center;
+    margin-top: 16px;
+}
+
+.tour-hint p {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.02em;
+}
+
+/* --- Footer Logo --- */
+.footer-logo {
+    height: 60px;
+    width: auto;
+    margin-bottom: 12px;
+}
 
 /* --- Nearby / Location --- */
 .nearby-grid {
@@ -971,7 +1023,6 @@ a { color: inherit; text-decoration: none; }
     transform: translateY(0);
 }
 
-/* Stagger children */
 .features-grid .animate-ready:nth-child(2) { transition-delay: 0.1s; }
 .features-grid .animate-ready:nth-child(3) { transition-delay: 0.2s; }
 .features-grid .animate-ready:nth-child(4) { transition-delay: 0.3s; }
@@ -1031,6 +1082,9 @@ a { color: inherit; text-decoration: none; }
         margin-top: 12px;
     }
 
+    .nav-logo-img { height: 40px; }
+    .scrolled .nav-logo-img { height: 36px; }
+
     .about-grid {
         grid-template-columns: 1fr;
         gap: 32px;
@@ -1071,6 +1125,8 @@ a { color: inherit; text-decoration: none; }
 
     .hero-actions { flex-direction: column; align-items: center; }
     .hero-actions .btn { width: 100%; max-width: 280px; }
+
+    .tour-container iframe { min-height: 300px; }
 }
 
 @media (max-width: 480px) {
