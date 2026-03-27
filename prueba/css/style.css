@@ -257,7 +257,7 @@ a { color: inherit; text-decoration: none; }
     inset: 0;
     background:
         linear-gradient(180deg, rgba(12, 53, 71, 0.3) 0%, rgba(12, 53, 71, 0.5) 100%),
-        url('https://costacolbun.cl/prueba/img/familia-muelle-2.jpg') center/cover no-repeat;
+        url('https://costacolbun.cl/img/familia-muelle-2.jpg') center/cover no-repeat;
     transform: scale(1.05);
     animation: heroZoom 20s ease-in-out infinite alternate;
 }
@@ -589,7 +589,7 @@ a { color: inherit; text-decoration: none; }
     inset: 0;
     background:
         linear-gradient(135deg, rgba(12, 53, 71, 0.92), rgba(26, 107, 138, 0.88)),
-        url('https://costacolbun.cl/prueba/img/wakeboard-2.jpg') center/cover;
+        url('https://costacolbun.cl/img/wakeboard-2.jpg') center/cover;
 }
 
 .section-lakelife .container {
