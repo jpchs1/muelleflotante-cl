@@ -912,17 +912,19 @@ a { color: inherit; text-decoration: none; }
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--white);
-    border-radius: 50%;
-    color: var(--gray-700);
+    background: transparent;
+    border-radius: 12px;
     transition: var(--transition);
-    padding: 10px;
+    padding: 6px;
+}
+
+.social-links a svg {
+    width: 100%;
+    height: 100%;
 }
 
 .social-links a:hover {
-    background: var(--lake-mid);
-    color: var(--white);
-    transform: translateY(-2px);
+    transform: translateY(-2px) scale(1.1);
 }
 
 /* Contact Form */
@@ -975,34 +977,39 @@ a { color: inherit; text-decoration: none; }
     padding: 0;
 }
 
+.footer-brand-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-brand-text {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
 .footer-top {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 40px;
-    padding: 64px 0 48px;
+    padding: 36px 0 36px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-logo-wrapper {
-    float: left;
     background: var(--white);
-    border-radius: var(--radius);
-    padding: 10px 14px;
-    margin: 0 16px 8px 0;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    padding: 8px 12px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
 }
 
 .footer-logo {
-    height: 44px;
+    height: 36px;
     width: auto;
     display: block;
-}
-
-.footer-brand p {
-    font-size: 0.85rem;
-    line-height: 1.8;
-    color: rgba(255, 255, 255, 0.6);
-    margin: 0;
 }
 
 .footer-nav h4 {
@@ -1169,6 +1176,11 @@ a { color: inherit; text-decoration: none; }
     .pricing-highlight { padding: 32px 24px; }
     .pricing-value { font-size: 2.5rem; }
 
+    .footer-brand-bar {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
     .footer-top {
         grid-template-columns: 1fr;
         gap: 32px;
