@@ -142,6 +142,67 @@
     }
     window.addEventListener('scroll', highlightNav, { passive: true });
 
+    // Blog Carousel
+    var blogCarousel = document.getElementById('blogCarousel');
+    var blogPrev = document.getElementById('blogPrev');
+    var blogNext = document.getElementById('blogNext');
+
+    if (blogCarousel && blogPrev && blogNext) {
+        var scrollAmount = 0;
+
+        function getBlogCardWidth() {
+            var card = blogCarousel.querySelector('.blog-card');
+            if (!card) return 340;
+            return card.offsetWidth + 24; // card width + gap
+        }
+
+        blogNext.addEventListener('click', function() {
+            var cardW = getBlogCardWidth();
+            var maxScroll = blogCarousel.scrollWidth - blogCarousel.parentElement.offsetWidth;
+            scrollAmount = Math.min(scrollAmount + cardW, maxScroll);
+            blogCarousel.style.transform = 'translateX(-' + scrollAmount + 'px)';
+        });
+
+        blogPrev.addEventListener('click', function() {
+            var cardW = getBlogCardWidth();
+            scrollAmount = Math.max(scrollAmount - cardW, 0);
+            blogCarousel.style.transform = 'translateX(-' + scrollAmount + 'px)';
+        });
+
+        // Touch/drag support
+        var isDragging = false;
+        var startX = 0;
+        var dragStartScroll = 0;
+
+        blogCarousel.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            startX = e.pageX;
+            dragStartScroll = scrollAmount;
+        });
+
+        blogCarousel.addEventListener('mousemove', function(e) {
+            if (!isDragging) return;
+            var diff = startX - e.pageX;
+            var maxScroll = blogCarousel.scrollWidth - blogCarousel.parentElement.offsetWidth;
+            scrollAmount = Math.max(0, Math.min(dragStartScroll + diff, maxScroll));
+            blogCarousel.style.transform = 'translateX(-' + scrollAmount + 'px)';
+        });
+
+        document.addEventListener('mouseup', function() { isDragging = false; });
+
+        blogCarousel.addEventListener('touchstart', function(e) {
+            startX = e.touches[0].pageX;
+            dragStartScroll = scrollAmount;
+        }, { passive: true });
+
+        blogCarousel.addEventListener('touchmove', function(e) {
+            var diff = startX - e.touches[0].pageX;
+            var maxScroll = blogCarousel.scrollWidth - blogCarousel.parentElement.offsetWidth;
+            scrollAmount = Math.max(0, Math.min(dragStartScroll + diff, maxScroll));
+            blogCarousel.style.transform = 'translateX(-' + scrollAmount + 'px)';
+        }, { passive: true });
+    }
+
     // Contact form handling
     var contactForm = document.getElementById('contactForm');
     contactForm.addEventListener('submit', function(e) {
