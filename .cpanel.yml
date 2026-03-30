@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/wwimpo/public_html/
-    - /bin/cp -R prueba $DEPLOYPATH
+    - export DEPLOYPATH=/home/wwimpo/muelleflotante.cl/
+    - /bin/cp wp-content/themes/hello-elementor/functions.php $DEPLOYPATH/wp-content/themes/hello-elementor/functions.php
